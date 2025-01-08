@@ -1,7 +1,7 @@
 // ======================== controllers/authController.js ========================
-const User = require('../models/User');
+const User = require('../model/userSchema');
 const bcrypt = require('bcrypt');
-const { generateToken } = require('../Middleware/jwt');
+const { generateToken } = require('../middleware/jwt');
 
 // User registration
 exports.register = async (req, res) => {
