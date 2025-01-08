@@ -1,5 +1,4 @@
-const authMiddleware = (req, res, next) => {
-    // Simulate authentication logic (replace with real authentication logic)
+const authMiddleware = (req, res, next) => { 
     const token = req.headers.authorization;
   
     if (!token) {
@@ -8,7 +7,7 @@ const authMiddleware = (req, res, next) => {
   
     try {
       // Simulated user (replace with token verification and user extraction)
-      req.user = { id: 1, role: 'student' }; // Example user object
+      req.user = { id: 1, role: 'student' };
       next();
     } catch (err) {
       res.status(401).json({ message: 'Unauthorized. Invalid token.' });
