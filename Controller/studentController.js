@@ -9,7 +9,7 @@ router.use((req, res, next) => {
 });
 
 // GET /profile: View their own profile
-router.get('/profile', async (req, res) => {
+router.get('/profile/:id', async (req, res) => {
   try {
     const student = await User.findById(req.studentId);
     if (student) {
