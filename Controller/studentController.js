@@ -1,51 +1,60 @@
 const express = require('express');
 const router = express.Router();
-
-
-// Replace with an environment variable in production
-
-const getStudentById = (id) => students.find(student => student.id === id);
+const User = require('../model/userSchema');
 
 // Middleware to simulate authenticated user
 router.use((req, res, next) => {
-  req.studentId = 1; // Replace with authentication logic
+  req.studentId = req.user.id; // Replaced with authentication logic
   next();
 });
 
 // GET /profile: View their own profile
-router.get('/profile', (req, res) => {
-  const student = getStudentById(req.studentId);
-  if (student) {
-    res.status(200).json(student);
-  } else {
-    res.status(404).json({ message: 'Student not found' });
+router.get('/profile', async (req, res) => {
+  try {
+    const student = await User.findById(req.studentId);
+    if (student) {
+      res.status(200).json(student);
+    } else {
+      res.status(404).json({ message: 'Student not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
 
 // GET /grades: View grades
-router.get('/grades', (req, res) => {
-  const student = getStudentById(req.studentId);
-  if (student) {
-    res.status(200).json({ grades: student.grades });
-  } else {
-    res.status(404).json({ message: 'Student not found' });
+router.get('/grades', async (req, res) => {
+  try {
+    const student = await User.findById(req.studentId);
+    if (student) {
+      res.status(200).json({ grades: student.grades });
+    } else {
+      res.status(404).json({ message: 'Student not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
 
 // POST /assignments: Submit assignments
-router.post('/assignments', (req, res) => {
+router.post('/assignments', async (req, res) => {
   const { assignmentName, content } = req.body;
 
   if (!assignmentName || !content) {
     return res.status(400).json({ message: 'Assignment name and content are required' });
   }
 
-  const student = getStudentById(req.studentId);
-  if (student) {
-    student.assignments.push({ assignmentName, content, submittedAt: new Date() });
-    res.status(201).json({ message: 'Assignment submitted successfully' });
-  } else {
-    res.status(404).json({ message: 'Student not found' });
+  try {
+    const student = await User.findById(req.studentId);
+    if (student) {
+      student.assignments.push({ assignmentName, content, submittedAt: new Date() });
+      await student.save();
+      res.status(201).json({ message: 'Assignment submitted successfully' });
+    } else {
+      res.status(404).json({ message: 'Student not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
 
