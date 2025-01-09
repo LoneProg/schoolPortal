@@ -12,6 +12,10 @@ const authRoutes = require('./Routes/authroutes');
 
 const app = express();
 
+//AdminRoute
+const adminRoutes = require('./Routes/adminRouter');
+app.use('/admin', adminRouter);
+
 // Middleware
 app.use(express.json());
 
