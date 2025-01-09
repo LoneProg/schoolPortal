@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose')
 
 // Mock Data (Replace with database integration as needed)
 let students = [
@@ -17,7 +18,7 @@ let students = [
 let announcements = [];
 
 // GET /students: View and manage student profiles
-router.get('/students', (req, res) => {
+router.get('/studen', (req, res) => {
   res.status(200).json(students);
 });
 
@@ -81,7 +82,4 @@ router.put('/assignments/:id', (req, res) => {
 
 module.exports = router;
 
-// Example for studentController.js
-exports.getProfile = (req, res) => { /* Logic here */ };
-exports.getGrades = (req, res) => { /* Logic here */ };
-exports.submitAssignment = (req, res) => { /* Logic here */ };
+

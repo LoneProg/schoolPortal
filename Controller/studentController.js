@@ -1,16 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-// Mock Data (Replace with database integration as needed)
-let students = [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    grades: { math: 'A', science: 'B', history: 'A-' },
-    assignments: [],
-  },
-];
+
+// Replace with an environment variable in production
 
 const getStudentById = (id) => students.find(student => student.id === id);
 
