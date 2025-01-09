@@ -1,7 +1,8 @@
 const express = require('express');
-const admincontroller = require('../Controller/admincontroller');
+
 const authenticate = require('../middleware/authMiddleware');
 const authorize = require('../middleware/roleMiddleware');
+const { fetchAllUsers, addNewUser, updateUser, deleteUser, generateReport, getSettings, updateSetting } = require('../Controller/admincontroller');
 
 
 const router = express.Router();
@@ -10,12 +11,12 @@ const router = express.Router();
 router.use(authenticate, authorize(['Admin']));
 
 // Admin routes
-router.get('/users', admincontroller.fetchAllUsers);
-router.post('/users', admincontroller.addNewUser);
-router.put('/users/:id', admincontroller.updateUser);
-router.delete('/users/:id', admincontroller.deleteUser);
-router.get('/reports', admincontroller.generateReport);
-router.get('/settings', admincontroller.getSettings);
-router.post('/settings', admincontroller.updateSetting);
+router.get('/users', fetchAllUsers);
+router.post('/users', addNewUser);
+router.put('/users/:id', updateUser);
+router.delete('/users/:id', deleteUser);
+router.get('/reports', generateReport);
+router.get('/settings', getSettings);
+router.post('/settings', updateSetting);
 
 module.exports = router;
