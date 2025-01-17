@@ -1,18 +1,23 @@
-const authMiddleware = (req, res, next) => { 
-    const token = req.headers.authorization;
-  
+const jwt = require('jsonwebtoken');
+const User = require('../model/userSchema');
+
+const authMiddleware = async (req, res, next) => {
+    const token = req.headers.authorization?.split(' ')[1];
+
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized. No token provided.' });
+        return res.status(401).json({ message: 'Unauthorized. No token provided.' });
     }
-  
+
     try {
-      // Simulated user (replace with token verification and user extraction)
-      req.user = { id: 1, role: 'student' };
-      next();
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = await User.findById(decoded.id).select('-password');
+        if (!req.user) {
+            return res.status(401).json({ message: 'Unauthorized. User not found.' });
+        }
+        next();
     } catch (err) {
-      res.status(401).json({ message: 'Unauthorized. Invalid token.' });
+        res.status(401).json({ message: 'Unauthorized. Invalid token.' });
     }
-  };
-  
-  module.exports = authMiddleware;
-  
+};
+
+module.exports = authMiddleware;

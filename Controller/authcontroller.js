@@ -1,4 +1,3 @@
-// ======================== controllers/authController.js ========================
 const User = require('../model/userSchema');
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../middleware/jwt');
@@ -33,16 +32,16 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) {
             console.log(`User with email ${email} not found`);
-            return res.status(403).json({ message: 'Unauthorized' });
+            return res.status(401).json({ message: 'Unauthorized' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             console.log(`Password mismatch for user with email ${email}`);
-            return res.status(403).json({ message: 'Unauthorized' });
+            return res.status(401).json({ message: 'Unauthorized' });
         }
 
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = generateToken(user);
         res.json({ token });
     } catch (error) {
         console.error('Error during login:', error);
