@@ -20,10 +20,11 @@ async function seedUser() {
     try {
         for (let i = 0; i < 51; i++) {
             const userName = `student${i}`;
-            const existingUser = await User.findOne({ userName });
+            const email = `user${i}@yopmail.com`;
+            const existingUser = await User.findOne({ $or: [{ userName }, { email }] });
 
             if (existingUser) {
-                console.log(`User ${userName} already exists`);
+                console.log(`User with username ${userName} or email ${email} already exists`);
                 continue;
             }
 
@@ -33,7 +34,7 @@ async function seedUser() {
             const newUser = new User({
                 userName,
                 password: hashedPassword,
-                email: `user${i}@yopmail.com`,
+                email,
                 role: 'Student'
             });
 
